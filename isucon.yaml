@@ -1,0 +1,6 @@
+- hosts: isucon-develop
+  roles:
+    - common
+    - ruby
+    - nginx
+    - mysql

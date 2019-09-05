@@ -1,0 +1,69 @@
+- name: install dependency rbenv
+  apt:
+    name:
+      - libreadline-dev
+      - zlib1g-dev
+      - libssl-dev
+    state: present
+    update_cache: yes
+  become: yes
+  tags: ruby
+
+- name: install rbenv
+  git:
+    repo: https://github.com/rbenv/rbenv.git
+    dest: /usr/local/rbenv
+  become: yes
+  tags: ruby
+
+- name: copy rbenv.sh
+  copy:
+    src: rbenv.sh
+    dest: /etc/profile.d/rbenv.sh
+    owner: root
+    group: root
+    mode: 0755
+  become: yes
+  tags: ruby
+
+  - name: install ruby-build
+  git:
+    repo: https://github.com/rbenv/ruby-build.git
+    dest: /usr/local/rbenv/plugins/ruby-build
+  become: yes
+  tags: ruby
+
+- name: create deploy group
+  group:
+    name: deploy
+  become: yes
+  tags: ruby
+
+- name: add ansible to deploy group
+  user:
+    name: ansible
+    groups: deploy
+  become: yes
+  tags: ruby
+
+ - name: change owner group rbenv directory to deploy
+  file:
+    path: /usr/local/rbenv
+    owner: root
+    group: deploy
+    recurse: yes
+    state: directory
+  become: yes
+  tags: ruby
+
+- name: install ruby
+  shell: bash -lc "rbenv install 2.6.4"
+
+- name: set global
+  shell: bash -lc "rbenv global 2.6.4"
+
+- name: install bundler
+  gem:
+    name: bundler
+    user_install: no
+    executable: /usr/local/rbenv/shims/gem

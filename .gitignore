@@ -1,0 +1,3 @@
+/host_vars/*
+!.gitkeep
+/ssh_config

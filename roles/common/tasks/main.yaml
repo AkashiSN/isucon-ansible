@@ -1,0 +1,17 @@
+- name: apt update && apt upgrade -y
+  apt:
+    upgrade: dist
+    update_cache: yes
+  become: yes
+  tags: common
+
+- name: install some packages
+  apt:
+    name:
+      - git
+      - build-essential
+      - curl
+    state: present
+    update_cache: yes
+  become: yes
+  tags: common

@@ -1,0 +1,13 @@
+- name: install a mysql deb package from the internet.
+  apt:
+    deb: https://dev.mysql.com/get/mysql-apt-config_0.8.13-1_all.deb
+  become: yes
+  tags: mysql
+
+- name: install mysql
+  apt:
+    name: mysql-server
+    state: present
+    update_cache: yes
+  become: yes
+  tags: mysql
