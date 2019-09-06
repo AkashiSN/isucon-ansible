@@ -20,6 +20,34 @@
   become: yes
   tags: nginx
 
+- name: download and unarchive alp
+  unarchive:
+    src: https://github.com/tkuchiki/alp/releases/download/v1.0.0/alp_linux_amd64.zip
+    dest: /usr/local/bin
+    remote_src: yes
+  become: yes
+  tags: nginx
+
+- name: change owner
+  file:
+    name: /usr/local/bin/alp
+    state: file
+    owner: root
+    group: root
+    mode: 0755
+  become: yes
+  tags: nginx
+
+- name: upload nginx.conf
+  copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: 0755
+  become: yes
+  tags: nginx
+
 - name: deamon reload
   systemd:
     name: nginx.service

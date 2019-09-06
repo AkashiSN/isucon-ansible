@@ -1,3 +1,10 @@
+- name: check test
+  stat:
+    path: /usr/local/rbenv
+  register: result
+  become: yes
+  tags: ruby
+
 - name: install dependency rbenv
   apt:
     name:
@@ -26,31 +33,18 @@
   become: yes
   tags: ruby
 
-  - name: install ruby-build
+- name: install ruby-build
   git:
     repo: https://github.com/rbenv/ruby-build.git
     dest: /usr/local/rbenv/plugins/ruby-build
   become: yes
   tags: ruby
 
-- name: create deploy group
-  group:
-    name: deploy
-  become: yes
-  tags: ruby
-
-- name: add ansible to deploy group
-  user:
-    name: ansible
-    groups: deploy
-  become: yes
-  tags: ruby
-
- - name: change owner group rbenv directory to deploy
+- name: change owner group rbenv directory
   file:
     path: /usr/local/rbenv
     owner: root
-    group: deploy
+    group: root
     recurse: yes
     state: directory
   become: yes
@@ -58,12 +52,18 @@
 
 - name: install ruby
   shell: bash -lc "rbenv install 2.6.4"
+  become: yes
+  tags: ruby
 
 - name: set global
   shell: bash -lc "rbenv global 2.6.4"
+  become: yes
+  tags: ruby
 
 - name: install bundler
   gem:
     name: bundler
     user_install: no
     executable: /usr/local/rbenv/shims/gem
+  become: yes
+  tags: ruby

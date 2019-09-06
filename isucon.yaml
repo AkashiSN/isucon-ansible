@@ -1,4 +1,4 @@
-- hosts: isucon-develop
+- hosts: isucon_server
   roles:
     - common
     - ruby
