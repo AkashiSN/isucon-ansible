@@ -1,0 +1,41 @@
+- name: download and unarchive alp
+  unarchive:
+    src: http://download.redis.io/releases/redis-5.0.5.tar.gz
+    dest: /usr/local/
+    remote_src: yes
+  become: yes
+  tags: redis
+
+- name: make redis
+  command: make
+  args:
+    chdir: /usr/local/redis-5.0.5/
+  become: yes
+  tags: redis
+
+- name: install redis
+  command: make install
+  args:
+    chdir: /usr/local/redis-5.0.5/
+  become: yes
+  tags: redis
+
+- name: deamonize on
+  replace:
+    dest: /usr/local/redis-5.0.5/redis.conf
+    regexp: 'daemonize no'
+    replace: 'daemonize yes'
+  become: yes
+  tags: redis
+
+- name: redis.conf copy
+  copy:
+    src: /usr/local/redis-5.0.5/redis.conf
+    dest: /etc/redis.conf
+    owner: isucon
+  become: yes
+  tags: redis
+
+- name: redis start
+  command: redis-server /etc/redis.conf
+  tags: redis

@@ -8,3 +8,8 @@
   roles:
     - common
     - mysql
+
+- hosts: isucon_redis_server
+  roles:
+    - common
+    - redis

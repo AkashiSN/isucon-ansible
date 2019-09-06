@@ -1,6 +1,8 @@
 - name: install aptitude
   apt: 
-    pkg: aptitude
+    pkg: 
+      - python-apt
+      - aptitude
   become: yes
   tags: common
 
