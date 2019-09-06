@@ -18,3 +18,21 @@
     line: "bind-address = 0.0.0.0"
   become: yes
   tags: mysql
+
+- name: deamon reload
+  systemd:
+    name: mysql.service
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+  become: yes
+  tags: mysql
+
+- name: Create database user with name 'isucon' with all database privileges
+  mysql_user:
+    name: isucon
+    password: "{{ database_password }}"
+    priv: '*.*:ALL'
+    state: present
+  become: yes
+  tags: mysql

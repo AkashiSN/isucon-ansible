@@ -9,9 +9,14 @@
 
 3. `private_key`というファイル名ですべてのサーバーに接続する秘密鍵を置く
 
-4. `hosts_vars/isucon_[app,db,redis].yaml`に以下の内容のファイルを作成
+4. `hosts_vars/isucon_[app,redis].yaml`に以下の内容のファイルを作成
 ```yaml
-ansible_sudo_pass: パスワード
+ansible_sudo_pass: ユーザーパスワード
+```
+`hosts_vars/isucon_db.yaml`に以下の内容のファイルを作成
+```yaml
+ansible_sudo_pass: ユーザーパスワード
+database_password: データベースのパスワード
 ```
 
 5. `ssh_config`の内容を環境に合わせて修正
@@ -50,6 +55,13 @@ Host isucon_redis
 ```bash
 $ make provision
 ```
+
+3台構成
+
+- App Server (nginx + ruby)
+- DataBase Server (mysql)
+- Redis Server (Redis)
+
 
 ## Install netdata
 ```bash
