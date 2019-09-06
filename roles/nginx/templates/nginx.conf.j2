@@ -63,19 +63,19 @@ http {
         listen 80;
 
         location /favicon.ico {
-            root /var/www/static/favicon.ico;
+            root {{ static_path }}/favicon.ico;
         }
 
         location /css {
-            root /var/www/static/css;
+            root {{ static_path }}/css;
         }
 
         location /img {
-            root /var/www/static/img;
+            root {{ static_path }}/img;
         }
 
         location /js {
-            root /var/www/static/js;
+            root {{ static_path }}/js;
         }
 
         location / {

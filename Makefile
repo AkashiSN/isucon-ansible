@@ -30,11 +30,30 @@ push:
 
 .PHONY: create-repo
 create-repo:
+	# App server
 	ssh -F ssh_config isucon_app -- "mkdir -p .ssh"
 	ssh -F ssh_config isucon_app -- "chmod 700 .ssh"
-	scp -r -F ssh_config ./deploy_key isucon_app:.ssh/deploy_key
-	scp -r -F ssh_config ./ssh_config_remote isucon_app:.ssh/config
+	scp -F ssh_config ./deploy_key isucon_app:.ssh/deploy_key
+	scp -F ssh_config ./ssh_config_remote isucon_app:.ssh/config
 	ssh -F ssh_config isucon_app -- "chmod 600 .ssh/*"
 	ssh -F ssh_config isucon_app -- "cd $(REMOTE_PROJECT_NAME)&& git init"
 	ssh -F ssh_config isucon_app -- "cd $(REMOTE_PROJECT_NAME)&& git remote add origin $(REPO)"
 	ssh -F ssh_config isucon_app -- "cd $(REMOTE_PROJECT_NAME)&& git pull origin master" 2>/dev/null; true
+	# Database server
+	ssh -F ssh_config isucon_db -- "mkdir -p .ssh"
+	ssh -F ssh_config isucon_db -- "chmod 700 .ssh"
+	scp -F ssh_config ./deploy_key isucon_db:.ssh/deploy_key
+	scp -F ssh_config ./ssh_config_remote isucon_db:.ssh/config
+	ssh -F ssh_config isucon_db -- "chmod 600 .ssh/*"
+	ssh -F ssh_config isucon_db -- "git clone $(REPO)"
+	# Redis server
+	ssh -F ssh_config isucon_redis -- "mkdir -p .ssh"
+	ssh -F ssh_config isucon_redis -- "chmod 700 .ssh"
+	scp -F ssh_config ./deploy_key isucon_redis:.ssh/deploy_key
+	scp -F ssh_config ./ssh_config_remote isucon_redis:.ssh/config
+	ssh -F ssh_config isucon_redis -- "chmod 600 .ssh/*"
+	ssh -F ssh_config isucon_redis -- "git clone $(REPO)"
+
+.PHONY: provision
+provision:
+	ansible-playbook site.yaml --extra-vars="static_path=/home/isucon/$(REMOTE_PROJECT_NAME)/webapp/static"

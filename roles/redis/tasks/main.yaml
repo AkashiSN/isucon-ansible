@@ -74,7 +74,6 @@
   copy:
     src: /usr/local/redis-5.0.5/redis.conf
     dest: /etc/redis/redis.conf
-    owner: isucon
     remote_src: yes
   become: yes
   tags: redis
@@ -104,7 +103,7 @@
     state: directory
     owner: redis
     group: redis
-    mode: 770
+    mode: 0770
   become: yes
   tags: redis
 

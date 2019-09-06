@@ -7,7 +7,7 @@
 
 2. `deploy_key`というファイル名でデプロイキーを用意する（GitHubのリポジトリにも登録しておく）
 
-3. `private_key`というファイル名でサーバーに接続する秘密鍵を置く
+3. `private_key`というファイル名ですべてのサーバーに接続する秘密鍵を置く
 
 4. `hosts_vars/isucon_[app,db,redis].yaml`に以下の内容のファイルを作成
 ```yaml
@@ -41,13 +41,14 @@ Host isucon_redis
     UserKnownHostsFile    /dev/null
 ```
 
-6. `make init`を実行してアプリケーションをGitHubにpush & サーバー側のリポジトリをpullする
+6. `make init`を実行してアプリケーションをGitHubにpush & すべてのサーバー側のリポジトリをpullする
 
+7. 対象サーバーに入って不要なアプリケーションを削除する
 
 ## プロビジョニング
 
 ```bash
-$ ansible-playbook site.yaml
+$ make provision
 ```
 
 ## Install netdata
