@@ -1,4 +1,4 @@
-- name: download and unarchive alp
+- name: download and unarchive redis
   unarchive:
     src: http://download.redis.io/releases/redis-5.0.5.tar.gz
     dest: /usr/local/

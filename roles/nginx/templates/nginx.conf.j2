@@ -62,27 +62,27 @@ http {
     server {
         listen 80;
 
+        location / {
+            proxy_pass http://127.0.0.1:8080/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
         location /favicon.ico {
-            root {{ static_path }}/favicon.ico;
+            root {{ static_path }};
         }
 
         location /css {
-            root {{ static_path }}/css;
+            root {{ static_path }};
         }
 
         location /img {
-            root {{ static_path }}/img;
+            root {{ static_path }};
         }
 
         location /js {
-            root {{ static_path }}/js;
-        }
-
-        location / {
-            proxy_pass http://127.0.0.1:8080/;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-Proto $scheme;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            root {{ static_path }};
         }
     }
 }

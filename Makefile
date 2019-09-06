@@ -11,6 +11,7 @@ download:
 	ssh -F ssh_config isucon_app --  "tar -cvzf tarball.tar.gz $(REMOTE_PROJECT_NAME)/"
 	scp -r -F ssh_config isucon_app:tarball.tar.gz .
 	tar xvf tarball.tar.gz
+	rm -rf $(LOCAL_PROJECT_DIR)
 	mv $(REMOTE_PROJECT_NAME) $(LOCAL_PROJECT_DIR)
 	rm -rf tarball.tar.gz
 
@@ -42,11 +43,13 @@ create-repo:
 	scp -F ssh_config ./ssh_config_remote isucon_db:.ssh/config
 	ssh -F ssh_config isucon_db -- "chmod 600 .ssh/*"
 	ssh -F ssh_config isucon_db -- "git clone $(REPO)"
+	ssh -F ssh_config isucon_db -- "mv $(ISUCON) $(REMOTE_PROJECT_NAME)"
 	# Redis server
 	scp -F ssh_config ./deploy_key isucon_redis:.ssh/deploy_key
 	scp -F ssh_config ./ssh_config_remote isucon_redis:.ssh/config
 	ssh -F ssh_config isucon_redis -- "chmod 600 .ssh/*"
 	ssh -F ssh_config isucon_redis -- "git clone $(REPO)"
+	ssh -F ssh_config isucon_redis -- "mv $(ISUCON) $(REMOTE_PROJECT_NAME)"
 
 .PHONY: provision
 provision:

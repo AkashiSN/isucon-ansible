@@ -17,6 +17,7 @@ ansible_sudo_pass: ユーザーパスワード
 ```yaml
 ansible_sudo_pass: ユーザーパスワード
 database_password: データベースのパスワード
+database_root_password: データベースのrootパスワード
 ```
 
 5. `ssh_config`の内容を環境に合わせて修正
@@ -61,6 +62,10 @@ $ make provision
 - App Server (nginx + ruby)
 - DataBase Server (mysql)
 - Redis Server (Redis)
+
+手動でやるべきこと, 
+- `/etc/systemd/system/*.service` の実行パスを変更する (`isucon_app`)
+- `mysql`の初期データを挿入する (アカウント情報は`host_vars/isucon_db.yaml`に書いてある) (`isucon_db`)
 
 
 ## Install netdata

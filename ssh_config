@@ -1,5 +1,5 @@
 Host isucon_app
-    HostName              172.16.1.43
+    HostName              172.16.1.80
     User                  isucon
     IdentityFile          private_key
     IdentitiesOnly        yes
@@ -7,7 +7,7 @@ Host isucon_app
     UserKnownHostsFile    /dev/null
 
 Host isucon_db
-    HostName              172.16.1.76
+    HostName              172.16.1.86
     User                  isucon
     IdentityFile          private_key
     IdentitiesOnly        yes
@@ -15,7 +15,7 @@ Host isucon_db
     UserKnownHostsFile    /dev/null
 
 Host isucon_redis
-    HostName              172.16.1.79
+    HostName              172.16.1.82
     User                  isucon
     IdentityFile          private_key
     IdentitiesOnly        yes

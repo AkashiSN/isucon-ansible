@@ -24,6 +24,7 @@
       - unzip
       - dstat
       - siege
+      - tree
       - percona-toolkit
     state: present
     update_cache: yes
@@ -43,5 +44,21 @@
     owner: root
     group: root
     mode: 0755
+  become: yes
+  tags: common
+
+- name: enable sudo path
+  replace:
+    dest: /etc/sudoers
+    regexp: '^Defaults	env_reset'
+    replace: '#Defaults	env_reset'
+  become: yes
+  tags: common
+
+- name: enable sudo path
+  replace:
+    dest: /etc/sudoers
+    regexp: '^Defaults	secure_path'
+    replace: '#Defaults	secure_path'
   become: yes
   tags: common

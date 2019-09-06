@@ -19,6 +19,13 @@
   become: yes
   tags: mysql
 
+- name: 
+  lineinfile:
+    dest: /etc/mysql/mysql.conf.d/mysqld.cnf
+    line: "default-authentication-plugin = mysql_native_password"
+  become: yes
+  tags: mysql
+
 - name: deamon reload
   systemd:
     name: mysql.service
@@ -28,11 +35,64 @@
   become: yes
   tags: mysql
 
-- name: Create database user with name 'isucon' with all database privileges
-  mysql_user:
-    name: isucon
-    password: "{{ database_password }}"
-    priv: '*.*:ALL'
-    state: present
+- name: get root password
+  shell: "grep 'A temporary password is generated for root@localhost' /var/log/mysqld.log | awk -F ' ' '{print $(NF)}'"
+  register: root_password
+  become: yes
+  tags: mysql
+
+- name: upload my.cnf
+  template:
+    src: my-before.cnf.j2
+    dest: /etc/my-before.cnf
+    owner: root
+    group: root
+    mode: 0755
+  become: yes
+  tags: mysql
+
+- name: upload my.cnf
+  template:
+    src: my-after.cnf.j2
+    dest: /etc/my-after.cnf
+    owner: root
+    group: root
+    mode: 0755
+  become: yes
+  tags: mysql
+
+- name: upload mysql.sh
+  template:
+    src: mysql.sh.j2
+    dest: /root/mysql.sh
+    owner: root
+    group: root
+    mode: 0777
+  become: yes
+  tags: mysql
+
+- name: Run script
+  command: sh /root/mysql.sh
+  become: yes
+  tags: mysql
+
+- name: remove my.cnf
+  file:
+    path: /etc/my-before.cnf
+    state: absent
+  become: yes
+  tags: mysql
+
+- name: remove my.cnf
+  file:
+    path: /etc/my-after.cnf
+    state: absent
+  become: yes
+  tags: mysql
+
+- name: remove mysql.sh
+  file:
+    path: /root/mysql.sh
+    state: absent
   become: yes
   tags: mysql
