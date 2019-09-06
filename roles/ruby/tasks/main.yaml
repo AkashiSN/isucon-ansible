@@ -11,6 +11,7 @@
       - libreadline-dev
       - zlib1g-dev
       - libssl-dev
+      - libmysqlclient-dev
     state: present
     update_cache: yes
   become: yes

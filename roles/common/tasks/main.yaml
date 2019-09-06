@@ -19,6 +19,8 @@
       - git
       - build-essential
       - curl
+      - zsh
+      - vim
       - unzip
       - dstat
       - siege
