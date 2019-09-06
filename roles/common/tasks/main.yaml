@@ -26,6 +26,7 @@
       - dstat
       - siege
       - tree
+      - htop
       - percona-toolkit
     state: present
     update_cache: yes
@@ -51,17 +52,20 @@
 - name: download .zshrc
   get_url:
     url: https://gist.github.com/AkashiSN/4ff2eb541742bedb3d281725b6d15c3f/raw/zshrc
-    dest: /etc/zshrc
+    dest: /home/isucon/.zshrc
     mode: '0440'
-    become: yes
-    tags: common
-    
+  tags: common
+
+- name: get the username running the deploy
+  command: whoami
+  register: username
+
 - name: change to zsh
   user:
-    name: {{ ansible_env.SUDO_USER }}
+    name: isucon
     shell: /bin/zsh
-    become: yes
-    tags: common
+  become: yes
+  tags: common
 
 - name: enable sudo path
   replace:
