@@ -1,5 +1,5 @@
 #!/bin/sh
 mysql --defaults-extra-file=/etc/my-before.cnf --connect-expired-password --execute="ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ database_root_password }}';"
 mysql --defaults-extra-file=/etc/my-after.cnf --execute="CREATE USER 'isucon'@'%' IDENTIFIED BY '{{ database_password }}';"
-mysql --defaults-extra-file=/etc/my-after.cnf --execute="CREATE DATABASE db_name;"
+mysql --defaults-extra-file=/etc/my-after.cnf --execute="CREATE DATABASE isucon;"
 mysql --defaults-extra-file=/etc/my-after.cnf --execute="GRANT ALL ON isucon.* TO isucon@'%';"
