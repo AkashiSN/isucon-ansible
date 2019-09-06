@@ -20,6 +20,7 @@
   git:
     repo: https://github.com/rbenv/rbenv.git
     dest: /usr/local/rbenv
+  when: result.stat.exists == false
   become: yes
   tags: ruby
 
@@ -30,6 +31,7 @@
     owner: root
     group: root
     mode: 0755
+  when: result.stat.exists == false
   become: yes
   tags: ruby
 
@@ -37,6 +39,7 @@
   git:
     repo: https://github.com/rbenv/ruby-build.git
     dest: /usr/local/rbenv/plugins/ruby-build
+  when: result.stat.exists == false
   become: yes
   tags: ruby
 
@@ -47,16 +50,19 @@
     group: root
     recurse: yes
     state: directory
+  when: result.stat.exists == false
   become: yes
   tags: ruby
 
 - name: install ruby
   shell: bash -lc "rbenv install 2.6.4"
+  when: result.stat.exists == false
   become: yes
   tags: ruby
 
 - name: set global
   shell: bash -lc "rbenv global 2.6.4"
+  when: result.stat.exists == false
   become: yes
   tags: ruby
 
@@ -65,5 +71,6 @@
     name: bundler
     user_install: no
     executable: /usr/local/rbenv/shims/gem
+  when: result.stat.exists == false
   become: yes
   tags: ruby

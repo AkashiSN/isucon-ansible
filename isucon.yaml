@@ -1,6 +1,10 @@
-- hosts: isucon_server
+- hosts: isucon_app_server
   roles:
     - common
     - ruby
     - nginx
+
+- hosts: isucon_db_server
+  roles:
+    - common
     - mysql

@@ -1,6 +1,5 @@
 /host_vars/*
 !.gitkeep
-/hosts
 /ssh_config
 /private_key
 /public_key

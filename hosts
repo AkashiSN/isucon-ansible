@@ -1,0 +1,8 @@
+[isucon_app_server]
+isucon_app
+
+[isucon_db_server]
+isucon_db
+
+[isucon_redis_server]
+isucon_redis

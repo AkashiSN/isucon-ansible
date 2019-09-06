@@ -17,7 +17,27 @@
       - git
       - build-essential
       - curl
+      - unzip
+      - dstat
+      - siege
+      - percona-toolkit
     state: present
     update_cache: yes
+  become: yes
+  tags: common
+
+- name: change hostname
+  hostname:
+    name: "{{ inventory_hostname }}"
+  become: yes
+  tags: common
+
+- name: copy env.sh
+  copy:
+    src: env.sh
+    dest: /etc/profile.d/env.sh
+    owner: root
+    group: root
+    mode: 0755
   become: yes
   tags: common
