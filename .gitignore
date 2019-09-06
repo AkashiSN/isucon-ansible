@@ -1,5 +1,6 @@
 /host_vars/*
 !.gitkeep
-/ssh_config
+/deploy_key
+/deploy_key.pub
 /private_key
 /public_key

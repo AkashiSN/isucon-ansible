@@ -28,14 +28,91 @@
   become: yes
   tags: redis
 
-- name: redis.conf copy
-  copy:
-    src: /usr/local/redis-5.0.5/redis.conf
-    dest: /etc/redis.conf
-    owner: isucon
+- name: comment out bind
+  replace:
+    dest: /usr/local/redis-5.0.5/redis.conf
+    regexp: 'bind 127.0.0.1'
+    replace: 'bind 0.0.0.0'
   become: yes
   tags: redis
 
-- name: redis start
-  command: redis-server /etc/redis.conf
+- name: protected mode off
+  replace:
+    dest: /usr/local/redis-5.0.5/redis.conf
+    regexp: 'protected-mode yes'
+    replace: 'protected-mode no'
+  become: yes
+  tags: redis
+
+- name: change supervised mode
+  replace:
+    dest: /usr/local/redis-5.0.5/redis.conf
+    regexp: 'supervised no'
+    replace: 'supervised systemd'
+  become: yes
+  tags: redis
+
+- name: change supervised mode
+  replace:
+    dest: /usr/local/redis-5.0.5/redis.conf
+    regexp: 'dir ./'
+    replace: 'dir /var/lib/redis'
+  become: yes
+  tags: redis
+
+- name: create directory
+  file:
+    path: /etc/redis
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  become: yes
+  tags: redis
+
+- name: copy redis.conf
+  copy:
+    src: /usr/local/redis-5.0.5/redis.conf
+    dest: /etc/redis/redis.conf
+    owner: isucon
+    remote_src: yes
+  become: yes
+  tags: redis
+
+- name: copy redis.service
+  copy:
+    src: redis.service
+    dest: /etc/systemd/system/redis.service
+    owner: root
+    group: root
+    mode: 0655
+  become: yes
+  tags: redis
+
+- name: Add the user 'redis'
+  user:
+    name: redis
+    createhome: no
+    system: yes
+  become: yes
+  tags: redis
+
+- name: create directory
+  file:
+    path: /var/lib/redis
+
+    state: directory
+    owner: redis
+    group: redis
+    mode: 770
+  become: yes
+  tags: redis
+
+- name: deamon reload
+  systemd:
+    name: redis.service
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+  become: yes
   tags: redis

@@ -1,25 +1,20 @@
 # isucon-ansible
 
-`hosts`ファイルを以下で作成
-```ini
-[isucon_app_server]
-isucon_app
+## 準備
 
-[isucon_db_server]
-isucon_db
+1. `ISUCON`用のリポジトリを作成して　
+`Makefile`の`ISUCON`を書き換えておく
 
-[isucon_redis_server]
-isucon_redis
-```
+2. `deploy_key`というファイル名でデプロイキーを用意する（GitHubのリポジトリにも登録しておく）
 
-`private_key`というファイル名で秘密鍵を置く
+3. `private_key`というファイル名でサーバーに接続する秘密鍵を置く
 
-`hosts_vars/isucon_[app,db,redis].yaml`に以下の内容のファイルを作成
+4. `hosts_vars/isucon_[app,db,redis].yaml`に以下の内容のファイルを作成
 ```yaml
 ansible_sudo_pass: パスワード
 ```
 
-`ssh_conf`の内容を環境に合わせて作成
+5. `ssh_config`の内容を環境に合わせて修正
 ```conf
 Host isucon_app
     HostName              IPアドレス等
@@ -45,6 +40,11 @@ Host isucon_redis
     StrictHostKeyChecking no
     UserKnownHostsFile    /dev/null
 ```
+
+6. `make init`を実行してアプリケーションをGitHubにpush & サーバー側のリポジトリをpullする
+
+
+## プロビジョニング
 
 ```bash
 $ ansible-playbook site.yaml

@@ -1,0 +1,23 @@
+Host isucon_app
+    HostName              172.16.1.43
+    User                  isucon
+    IdentityFile          private_key
+    IdentitiesOnly        yes
+    StrictHostKeyChecking no
+    UserKnownHostsFile    /dev/null
+
+Host isucon_db
+    HostName              172.16.1.76
+    User                  isucon
+    IdentityFile          private_key
+    IdentitiesOnly        yes
+    StrictHostKeyChecking no
+    UserKnownHostsFile    /dev/null
+
+Host isucon_redis
+    HostName              172.16.1.79
+    User                  isucon
+    IdentityFile          private_key
+    IdentitiesOnly        yes
+    StrictHostKeyChecking no
+    UserKnownHostsFile    /dev/null
