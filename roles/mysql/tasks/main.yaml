@@ -11,3 +11,10 @@
     update_cache: yes
   become: yes
   tags: mysql
+
+- name: 
+  lineinfile:
+    dest: /etc/mysql/mysql.conf.d/mysqld.cnf
+    line: "bind-address = 0.0.0.0"
+  become: yes
+  tags: mysql

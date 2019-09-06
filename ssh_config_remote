@@ -1,3 +1,4 @@
 Host github.com
-    HostName        github.com
-    IdentityFIle    ~/.ssh/deploy_key
+    HostName              github.com
+    IdentityFIle          ~/.ssh/deploy_key
+    StrictHostKeyChecking no
