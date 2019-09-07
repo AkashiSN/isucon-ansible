@@ -56,6 +56,13 @@
     mode: '0440'
   tags: common
 
+- name: add /etc/profile.d
+  lineinfile:
+    dest: /home/isucon/.zshrc
+    line: "source /etc/profile.d/env.sh"
+  become: yes
+  tags: common
+
 - name: get the username running the deploy
   command: whoami
   register: username
@@ -80,5 +87,12 @@
     dest: /etc/sudoers
     regexp: '^Defaults	secure_path'
     replace: '#Defaults	secure_path'
+  become: yes
+  tags: common
+
+- name: no sudo password
+  lineinfile:
+    dest: /etc/sudoers
+    line: "isucon ALL=NOPASSWD: ALL"
   become: yes
   tags: common

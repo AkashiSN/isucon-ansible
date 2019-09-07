@@ -75,3 +75,11 @@
   when: result.stat.exists == false
   become: yes
   tags: ruby
+
+- name: add /etc/profile.d
+  lineinfile:
+    dest: /home/isucon/.zshrc
+    line: "source /etc/profile.d/rbenv.sh"
+  when: result.stat.exists == false
+  become: yes
+  tags: ruby
