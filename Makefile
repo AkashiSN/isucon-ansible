@@ -1,5 +1,5 @@
-ISUCON := isucon8
-REMOTE_PROJECT_NAME := torb
+ISUCON := isucon9
+REMOTE_PROJECT_NAME := isucari
 
 LOCAL_PROJECT_DIR := ../$(ISUCON)
 REPO := git@github.com:AkashiSN/$(ISUCON).git
@@ -18,6 +18,7 @@ download:
 .PHONY: push
 push:
 	cd $(LOCAL_PROJECT_DIR); echo ".bundle" > .gitignore
+	cd $(LOCAL_PROJECT_DIR); echo "/webapp/public/upload/" > .gitignore
 	cd $(LOCAL_PROJECT_DIR); echo "/webapp/go" >> .gitignore
 	cd $(LOCAL_PROJECT_DIR); echo "/webapp/nodejs" >> .gitignore
 	cd $(LOCAL_PROJECT_DIR); echo "/webapp/perl" >> .gitignore
@@ -35,9 +36,9 @@ create-repo:
 	scp -F ssh_config ./deploy_key isucon_app:.ssh/deploy_key
 	scp -F ssh_config ./ssh_config_remote isucon_app:.ssh/config
 	ssh -F ssh_config isucon_app -- "chmod 600 .ssh/*"
-	ssh -F ssh_config isucon_app -- "cd $(REMOTE_PROJECT_NAME)&& git init"
-	ssh -F ssh_config isucon_app -- "cd $(REMOTE_PROJECT_NAME)&& git remote add origin $(REPO)"
-	ssh -F ssh_config isucon_app -- "cd $(REMOTE_PROJECT_NAME)&& git pull origin master" 2>/dev/null; true
+	ssh -F ssh_config isucon_app -- "cd $(REMOTE_PROJECT_NAME) && git init"
+	ssh -F ssh_config isucon_app -- "cd $(REMOTE_PROJECT_NAME) && git remote add origin $(REPO)"
+	ssh -F ssh_config isucon_app -- "cd $(REMOTE_PROJECT_NAME) && git pull origin master" 2>/dev/null; true
 	# Database server
 	scp -F ssh_config ./deploy_key isucon_db:.ssh/deploy_key
 	scp -F ssh_config ./ssh_config_remote isucon_db:.ssh/config
@@ -53,4 +54,18 @@ create-repo:
 
 .PHONY: provision
 provision:
-	ansible-playbook site.yaml --extra-vars="static_path=/home/isucon/$(REMOTE_PROJECT_NAME)/webapp/static"
+	ansible-playbook site.yaml --extra-vars="static_path=/home/isucon/$(REMOTE_PROJECT_NAME)/webapp/public"
+
+.PHONY: pull-app
+pull-app:
+	ssh -F ssh_config isucon_app -- "cd $(REMOTE_PROJECT_NAME) && git pull"
+	ssh -F ssh_config isucon_app -- "sudo service $(REMOTE_PROJECT_NAME).ruby restart"
+	ssh -F ssh_config isucon_app -- "sudo service nginx restart"
+
+.PHONY: bench
+bench:
+	ssh -F ssh_config isucon_app -- "sudo service $(REMOTE_PROJECT_NAME).ruby stop"
+	ssh -F ssh_config isucon_app -- "sudo service $(REMOTE_PROJECT_NAME).ruby start"
+
+.PHONY: alp
+	ssh -F ssh_config isucon_app -- "alp -f /var/log/nginx/ltsv_access.log  --sum  -r --aggregates '/profile/\w+, /diary/entry/\d+, /diary/entries/\w+, /diary/comment/\d+, /friends/\w+' --start-time-duration 5m"

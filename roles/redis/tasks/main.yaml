@@ -55,6 +55,14 @@
 - name: change supervised mode
   replace:
     dest: /usr/local/redis-5.0.5/redis.conf
+    regexp: '# requirepass foobared'
+    replace: "requirepass {{ redis_password }}"
+  become: yes
+  tags: redis
+
+- name: change supervised mode
+  replace:
+    dest: /usr/local/redis-5.0.5/redis.conf
     regexp: 'dir ./'
     replace: 'dir /var/lib/redis'
   become: yes
