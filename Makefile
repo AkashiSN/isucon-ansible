@@ -55,17 +55,3 @@ create-repo:
 .PHONY: provision
 provision:
 	ansible-playbook site.yaml --extra-vars="static_path=/home/isucon/$(REMOTE_PROJECT_NAME)/webapp/public"
-
-.PHONY: pull-app
-pull-app:
-	ssh -F ssh_config isucon_app -- "cd $(REMOTE_PROJECT_NAME) && git pull"
-	ssh -F ssh_config isucon_app -- "sudo service $(REMOTE_PROJECT_NAME).ruby restart"
-	ssh -F ssh_config isucon_app -- "sudo service nginx restart"
-
-.PHONY: bench
-bench:
-	ssh -F ssh_config isucon_app -- "sudo service $(REMOTE_PROJECT_NAME).ruby stop"
-	ssh -F ssh_config isucon_app -- "sudo service $(REMOTE_PROJECT_NAME).ruby start"
-
-.PHONY: alp
-	ssh -F ssh_config isucon_app -- "alp -f /var/log/nginx/ltsv_access.log  --sum  -r --aggregates '/profile/\w+, /diary/entry/\d+, /diary/entries/\w+, /diary/comment/\d+, /friends/\w+' --start-time-duration 5m"
